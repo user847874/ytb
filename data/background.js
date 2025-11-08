@@ -1,4 +1,4 @@
-"strict";
+"use strict";
 
 chrome.runtime.onInstalled.addListener(function(details) {
   showCurrentTime();
@@ -408,3 +408,4 @@ async function fetch2ip() {
   }
 
 */
+
