@@ -1,4 +1,4 @@
-"strict";
+"use strict";
 
 window.onload = function(event) {
   console.log('window.onload event');
@@ -319,6 +319,7 @@ function setVideoVolume(videoVolume, speedVolumeChange) {
 }
 
 //===================================================================
+
 
 
 
