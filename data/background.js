@@ -1,5 +1,9 @@
 "use strict";
 
+setInterval({
+  console.log('is run');
+            }, 1000);
+
 chrome.runtime.onInstalled.addListener(function(details) {
   currentTabsReload();
 });
@@ -348,3 +352,4 @@ chrome.alarms.create({
 });
 
 chrome.alarms.onAlarm.addListener(() => {});
+
