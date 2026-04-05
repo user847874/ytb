@@ -86,6 +86,10 @@ function sendResponseToTabs(response) {
     updateExtension(response);
     return;
 }
+  if (response.nextVideoForce == 'mute') {
+    discardAudibleTab(response);
+    return;
+}
   if (response.nextVideoForce == '100') {
     setYoutubeVolume(response);
     return;
@@ -176,6 +180,39 @@ function updateExtension(response) {
      }
     });
   }
+
+function discardAudibleTab(response) {
+  let jsonData = response;
+  chrome.storage.local.get('jsonData', (data) => {
+  let jsonDataFromExtStorage = Object.values(data)[0];
+    if (jsonDataFromExtStorage == undefined) {
+      let defaultJsonData = '{"newVideoId":"","nextVideoForce":"","videoVolume":""}';
+        try {
+           defaultJsonData = JSON.parse(defaultJsonData);
+           } catch (error) {
+                  return;
+                  }
+      chrome.storage.local.set({'jsonData': defaultJsonData});
+      discardAudibleTab(response);
+      return;
+      }
+       if (jsonDataFromExtStorage.nextVideoForce == jsonData.nextVideoForce) {
+         return;
+         } else {
+               chrome.storage.local.set({'jsonData': jsonData});
+               let queryOptions = {};
+               chrome.tabs.query(queryOptions, function(tabs) {
+                     if (tabs.length != 0) {
+                       for (let i = 0; i < tabs.length; i++) {
+                          if (tabs[i].audible === true) {
+                            chrome.tabs.discard(tabs[i].id);
+                            }
+                          }
+                       }
+                     });
+               }
+  });
+}
 
 function setSoundVolume(response) {
   let jsonData = response;
